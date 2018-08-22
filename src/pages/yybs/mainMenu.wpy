@@ -1,0 +1,30 @@
+<template>
+  <view class='page'>
+
+    <repeat for="{{listMenu}}" key="index" index="index" item="item">
+        <NavItem  :obj='item'/>
+    </repeat>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import NavItem from '../../components/navItem'
+
+  export default class MainMenu extends wepy.page {
+      data = {
+          name:'阿拉蕾',
+          listMenu:[{
+              name:'预约办税',
+              url:'/pages/login'
+          },{
+              name:'预约信息查询与取消'
+          },{
+              name:'预约违约信息查询'
+          }]
+      }
+    components = {
+      NavItem: NavItem
+    }
+  }
+
+</script>
