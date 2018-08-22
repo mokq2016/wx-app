@@ -77,15 +77,22 @@ button[type="primary"] {
 .hidden{
   display:none;
 }
+.weui-cell_access{
+  background-color:#fff;
+}
 </style>
-
+<template>
+<Text>11</Text>
+</template>
 <script>
 import wepy from 'wepy'
 import 'wepy-async-function'
 
+require('./utils/extend.js')
+require('./utils/common.js')
 import { setStore } from 'wepy-redux'
 import configStore from './store'
-
+import config from './config/config.js'
 const store = configStore()
 setStore(store)
 
@@ -93,14 +100,20 @@ export default class extends wepy.app {
   config = {
     pages: [
       'pages/login',
+      'pages/yybs/mainMenu',
+      
       'pages/index'
+      
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#235EBD',
       navigationBarTitleText: '深圳市电子税务局',
       navigationBarTextStyle: '#fff'
-    }
+    },
+    "usingComponents": {
+      "Message":'./components/message'
+  }
   }
 
   globalData = {
@@ -110,10 +123,10 @@ export default class extends wepy.app {
   constructor () {
     super()
     this.use('requestfix')
-    this.use('promisify')
   }
 
   onLaunch() {
+    
     this.testAsync()
   }
 
@@ -126,8 +139,10 @@ export default class extends wepy.app {
   }
 
   async testAsync () {
+    this.getOppenid()
     const data = await this.sleep(3)
     console.log(data)
+    
   }
 
   getUserInfo(cb) {
@@ -142,5 +157,22 @@ export default class extends wepy.app {
       }
     })
   }
+
+  getOppenid(){
+    wx.login({
+      success:function(res){
+            let url = 'https://api.weixin.qq.com/sns/jscode2session?appid='+config.AppID+'&secret='+config.AppSecret+'&js_code='+res.code+'&grant_type=authorization_code'; 
+            wx.request({
+              url:url,
+              method:'GET',
+              success:function(result){
+                console.log(result)
+              }
+            })
+      }
+    })
+  }
+  // $get = http.reqGet
+  // $post = http.reqPost
 }
 </script>
