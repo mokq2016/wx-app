@@ -1,5 +1,5 @@
 <template>
-  <view class="i-class i-message i-message-{{123}} {{ !visible ? 'i-message-show' : '' }}">
+  <view class="i-class i-message i-message-{{type}} {{ visible ? 'i-message-show' : '' }}">
     {{ content }}
   </view>
 </template>
@@ -8,37 +8,45 @@
   export default class Message extends wepy.component {
     props = {
       visible: false,
-      content: '123',
+      content: {
+        type:String,
+        default:'系统异常，请稍后再试'
+      },
       duration: 2,
-      type: 'error' // default || success || warning || error
+      type: {
+        type:String,
+        default:'error'// default || success || warning || error
+      }
     }
 
-    // methods = {
-    //   handleShow(options) {
+     methods = {
+      handleShow(options) {
         
-    //     const {
-    //       type = 'error', duration = 2
-    //     } = options;
-    //     this.visible = true;
-    //     const d = this.props.duration * 1000;
-    //     let timmer = null;
-    //     if (timmer) clearTimeout(timmer);
-    //     if (d !== 0) {
-    //       timmer = setTimeout(() => {
-    //         this.handleHide();
-    //         timmer = null;
-    //       }, d);
-    //     }
-    //   }
+        const {
+          type = 'error', duration = 2,content = '系统异常，请稍后再试'
+        } = options;
+        this.type = type;
+         this.content = content;
+        this.visible = true;
+        const d = this.props.duration * 1000;
+        let timmer = null;
+        if (timmer) clearTimeout(timmer);
+        if (d !== 0) {
+          timmer = setTimeout(() => {
+            this.handleHide();
+            timmer = null;
+          }, d);
+        }
+      }
 
-    // }
-    // handleHide() {
-    //   this.visible = false;
-    //   this.content = '';
-    //   this.duration = 2;
-    //   this.props.type = 'error'
-    //   this.$apply();
-    // }
+    }
+    handleHide() {
+      this.visible = false;
+      this.content = '';
+      this.duration = 2;
+      this.type = 'error'
+      this.$apply();
+    }
   }
 
 </script>
@@ -80,7 +88,7 @@
   }
 
   .i-message-error {
-    background: #ed3f14
+    background: #FF0000
   }
 
 </style>

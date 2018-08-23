@@ -57,7 +57,7 @@
       </view>
     </view>
   </view>
-  <message/>
+  <message />
   </view>
 </template>
 <script>
@@ -77,20 +77,20 @@
       }
     }
     components = {
-      message:Message
+      message: Message
     }
-    
+
     methods = {
       chooseLoginStyle(bool) {
         this.selected = bool;
       },
       login() {
-        this.$invoke('message','handleShow',{type:'error'})
-        // if (this.selected == 'false') {
-        //   this.mobileLogin()
-        // } else {
-        //   this.taxLogin()
-        // }
+        
+        if (this.selected == 'false') {
+          this.mobileLogin()
+        } else {
+          this.taxLogin()
+        }
       },
       handleInput(e) {
         let id = e.target.id;
@@ -110,8 +110,19 @@
         }
       }
     }
+    onLoad(){
+        console.log(this)
+    }
 
     taxLogin() {
+      if(this.taxStyle.userName.trim() == ''){
+        this.$error('税号不能为空');
+        return;
+      }
+      if(this.taxStyle.password.trim() == ''){
+        this.$error('密码不能为空');
+        return;
+      }
       let param = {
         nsrsbh: this.taxStyle.userName,
         nsrpwd: sha1(this.taxStyle.password),
@@ -119,12 +130,24 @@
         redirectURL: "",
         time: new Date().format('yyyy-MM-dd hh:mm:ss')
       }
-      this.$post('/api/weixin/yybslogin',param).then(function(res){
-          if(res.success){
+      this.$post('/api/weixin/yybslogin', param).then(function (res) {
+        if (res.success) {
+          wx.setStorage({ //保存token
+            key: "token",
+            data: res.data.wxToken
+          })
+          var nsrInfo = res.data.nsrxxVO;
+          wx.setStorage({ //保存纳税人登录信息
+            key: "nsrInfo",
+            data: nsrInfo
+          })
 
-          }else{
-              
-          }
+          wx.reLaunch({
+            url: './yybs/mainMenu',
+          })
+        } else {
+
+        }
       })
     }
     mobileLogin() {

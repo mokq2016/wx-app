@@ -99,9 +99,12 @@ setStore(store)
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/login',
+      
+       'pages/login',
+      'pages/yybs/tax/step1',
       'pages/yybs/mainMenu',
       
+     
       'pages/index'
       
     ],
@@ -110,10 +113,7 @@ export default class extends wepy.app {
       navigationBarBackgroundColor: '#235EBD',
       navigationBarTitleText: '深圳市电子税务局',
       navigationBarTextStyle: '#fff'
-    },
-    "usingComponents": {
-      "Message":'./components/message'
-  }
+    }
   }
 
   globalData = {

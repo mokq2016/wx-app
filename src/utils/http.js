@@ -44,7 +44,7 @@ function request(options) {
     wx.request({
       url: config.serverHost + options.url,
       data: options.data,
-      header: options.header,
+      header: {...options.header,'Accept':'application/json, text/plain, */*'},
       method: options.method,
       success: function(res) {
         wx.hideLoading();

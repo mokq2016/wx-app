@@ -1,0 +1,158 @@
+<template>
+  <view class='page'>
+    <view class="weui-search-bar">
+      <view class="weui-search-bar__form">
+        <view class="weui-search-bar__box">
+          <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
+          <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{inputVal}}" focus="{{inputShowed}}" bindinput="inputTyping"
+          />
+          <view class="weui-icon-clear" wx:if="{{inputVal.length > 0}}" bindtap="clearInput">
+            <icon type="clear" size="14"></icon>
+          </view>
+        </view>
+        <label class="weui-search-bar__label" hidden="{{inputShowed}}" bindtap="showInput">
+          <icon class="weui-icon-search" type="search" size="14"></icon>
+          <view class="weui-search-bar__text">搜索</view>
+        </label>
+      </view>
+      <view class="weui-search-bar__cancel-btn" hidden="{{!inputShowed}}" bindtap="hideInput">取消</view>
+    </view>
+    <view class='area-view'>
+      <block wx:for='{{areaArr}}' wx:key='{{index}}'>
+        <view class="filter-item {{index == selectedIdx?'selected':''}}" bindtap='filterArea({{index}})'>{{item}}</view>
+      </block>
+    </view>
+    <view class='list'>
+      <block wx:for='{{yybsInfo.bsdtArr}}' wx:key='{{index}}'>
+        <navigator wx:if='{{item.isShow}}' url="{{0}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+          <view class="weui-cell__hd">
+          </view>
+          <view class="weui-cell__bd">
+            <view calss='name'>{{item.depName}}</view>
+            <view class='address'>地址：{{item.address}}</view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
+      </block>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class Step1 extends wepy.page {
+    data = {
+      inputVal: '',
+      inputShowed: false,
+      selectedIdx: 12,
+      areaArr: ['罗湖区', '福田区', '南山区', '盐田区', '宝安区', '龙岗区', '龙华区', '坪山区', '光明区', '大鹏新区', '前海', '蛇口', '全部'],
+      yybsInfo: {
+        bsdtArr: [],
+        keyWord: ''
+      }
+    }
+    methods = {
+      inputTyping(e) {
+        this.inputVal = e.detail.value;
+        this.disPlayHandle(e.detail.value);
+      },
+      clearInput() {
+        this.inputVal = '';
+      },
+      showInput() {
+        this.inputShowed = true;
+      },
+      hideInput() {
+        this.inputShowed = false;
+        this.inputVal = '';
+      },
+
+      filterArea(index) {
+        this.selectedIdx = index;
+        let key = this.areaArr[index];
+        this.disPlayHandle(key);
+      }
+
+
+    }
+    onLoad() {
+      this.initBsfwt()
+    }
+    disPlayHandle(key) {
+      this.yybsInfo.bsdtArr.forEach(function (item) {
+        if (item.depName.indexOf(key) === -1 && key != '全部') {
+          item.isShow = false;
+        } else {
+          item.isShow = true;
+        }
+      })
+    }
+    initBsfwt() {
+      this.$post('/api/yybs/getBsdtxx', {
+        "depid": "All"
+      }, {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      }).then((result) => {
+        if (result.success) {
+          if (result.value != null) {
+            var bsdtArr2 = [];
+            var bsdtData = result.value;
+            for (var key in bsdtData) {
+              if (!bsdtData[key].success) {
+                continue;
+              }
+              if (bsdtData[key].data.errcode != '0') {
+                continue;
+              }
+              bsdtArr2 = bsdtArr2.concat(bsdtData[key].data.depifos);
+            }
+            this.yybsInfo.bsdtArr = bsdtArr2.sort(
+              function compareFunction(param1, param2) {
+                return param1.depName.localeCompare(param2.depName, "zh");
+              }
+            );
+            this.yybsInfo.bsdtArr.forEach(function (item) {
+              item.isShow = true;
+            })
+            this.$apply();
+          } else {}
+        } else {}
+      })
+    }
+  }
+
+</script>
+<style lang="less">
+  .area-view {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px 0;
+    .filter-item {
+      width: 27%;
+      text-align: center;
+      border: 1px solid #169BD5;
+      background-color: #169BD5;
+      color: #fff;
+      margin: 4px 8px;
+      border-radius: 4px;
+    }
+    .selected {
+      background-color: #99CC00;
+      border: 1px solid #99CC00;
+    }
+  }
+
+  .list {
+    .weui-cell {
+      padding: 6px 10px;
+      .name {
+        line-height: 28px;
+      }
+      .address {
+        line-height: 14px;
+        color: #999;
+        font-size: 14px;
+      }
+    }
+  }
+
+</style>

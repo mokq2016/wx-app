@@ -15,7 +15,7 @@
           name:'阿拉蕾',
           listMenu:[{
               name:'预约办税',
-              url:'/pages/login'
+              url:'/pages/yybs/tax/step1'
           },{
               name:'预约信息查询与取消'
           },{
