@@ -1,0 +1,118 @@
+<template>
+  <view class='page'>
+    <block wx:for="{{companyies}}" wx:key='{{index}}'>
+      <view class='company-item' bindtap='{{selected == index}}'>
+        <view class='logo-view'>
+          <image src='../../images/company.png' class='company-logo'></image>
+        </view>
+        <view class='company'>
+          <view>{{item.nsrmc}}</view>
+          <view class='desc'>{{item.type == '1'?'办税员':item.type=='2'?'法定代表人':item.type=='3'?'财务负责人':item.type=='4'?'税务代理人':item.type=='6'?'购票员':''}}</view>
+        </view>
+      </view>
+    </block>
+    <view class="center">
+      <button class="weui-btn" type="primary" bindtap='login'>确定</button>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class ChooseIdentity extends wepy.page {
+    data = {
+      companyies: [{
+        nsrmc: '一起赢网络科技优先公司',
+        type: '1'
+      }, {
+        nsrmc: '一起赢网络科技优先公司',
+        type: '2'
+      }]
+    }
+    config = {
+      "navigationBarTitleText": '办税身份选择'
+    }
+
+    methods = {
+       getRoleName(roleType) {
+        console.log(roleType)
+        let bsType = '';
+        switch (roleType) {
+          case '1':
+            bsType = '办税员';
+            break;
+          case '2':
+            bsType = '法定代表人';
+            break;
+          case '3':
+            bsType = '财务负责人';
+            break;
+          case '4':
+            bsType = '税务代理人';
+            break;
+          case '6':
+            bsType = '购票员';
+            break;
+          default:
+            bsType = ''
+            break;
+        }
+        console.log(roleType)
+        return bsType;
+      }
+    }
+    getRoleName(roleType) {
+        console.log(roleType)
+        let bsType = '';
+        switch (roleType) {
+          case '1':
+            bsType = '办税员';
+            break;
+          case '2':
+            bsType = '法定代表人';
+            break;
+          case '3':
+            bsType = '财务负责人';
+            break;
+          case '4':
+            bsType = '税务代理人';
+            break;
+          case '6':
+            bsType = '购票员';
+            break;
+          default:
+            bsType = ''
+            break;
+        }
+        console.log(roleType)
+        return bsType;
+      }
+  }
+
+</script>
+<style lang="less">
+  .company-item {
+    display: flex;
+    margin: 8px 10px;
+    border: 1px solid #BFBFBF;
+    padding: 4px;
+    .logo-view {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      .company-logo {
+        width: 30px;
+        height: 30px;
+      }
+    }
+
+    .company {
+      margin-left: 10px;
+      .desc {
+        color: #999;
+        font-size: 14px;
+      }
+    }
+
+  }
+
+</style>

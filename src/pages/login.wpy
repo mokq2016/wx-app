@@ -45,17 +45,18 @@
                   <image src='../images/password.png' class='form-logo'></image>
                 </view>
                 <view class="weui-cell__bd">
-                  <input class="weui-input" placeholder="请输入密码" type="password" id='mobilePassword' value='{{mobileStyle.userName}}' />
+                  <input class="weui-input" placeholder="请输入密码" type="password" id='mobilePassword' value='{{mobileStyle.password}}'  bindinput='handleInput'/>
                 </view>
               </view>
             </view>
           </view>
         </view>
       </view>
-      <view class="center">
+      
+    </view>
+    <view class="center" style='padding-top:0'>
         <button class="weui-btn" type="primary" bindtap='login'>登录</button>
       </view>
-    </view>
   </view>
   <message />
   </view>
@@ -146,18 +147,31 @@
             url: './yybs/mainMenu',
           })
         } else {
-
+            this.$alert(res.message)
         }
       })
     }
     mobileLogin() {
+        if(this.mobileStyle.userName.trim() == ''){
+        this.$error('手机号码或证件号码不能为空');
+        return;
+      }
+      if(this.mobileStyle.password.trim() == ''){
+        this.$error('密码不能为空');
+        return;
+      }
       let param = {
         mobile: this.mobileStyle.userName,
         password: this.mobileStyle.password
       }
 
       this.$post('/api/mobile/general/login', param).then((result) => {
-        console.log(result)
+        if(result.success){
+            let accountInfo = result.data.accountInfo;
+
+        }else{
+            this.$alert(result.message);
+        }
       })
     }
   }

@@ -67,6 +67,7 @@ button[type="primary"] {
 }
 .center{
   margin:auto;
+  padding:5%;
 }
 .mt3{
   margin-top:3%;
@@ -99,7 +100,7 @@ setStore(store)
 export default class extends wepy.app {
   config = {
     pages: [
-      
+      'pages/chooseIdentity/chooseIdentity',
        'pages/login',
       'pages/yybs/tax/step1',
       'pages/yybs/mainMenu',
