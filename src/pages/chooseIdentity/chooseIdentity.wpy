@@ -1,7 +1,7 @@
 <template>
   <view class='page'>
     <block wx:for="{{companyies}}" wx:key='{{index}}'>
-      <view class='company-item' bindtap='{{selected == index}}'>
+      <view class="{{selected == index ? 'company-item selected-item':'company-item'}}" bindtap='clickHandle({{index}})'>
         <view class='logo-view'>
           <image src='../../images/company.png' class='company-logo'></image>
         </view>
@@ -20,6 +20,7 @@
   import wepy from 'wepy'
   export default class ChooseIdentity extends wepy.page {
     data = {
+      selected:-1,
       companyies: [{
         nsrmc: '一起赢网络科技优先公司',
         type: '1'
@@ -33,59 +34,11 @@
     }
 
     methods = {
-       getRoleName(roleType) {
-        console.log(roleType)
-        let bsType = '';
-        switch (roleType) {
-          case '1':
-            bsType = '办税员';
-            break;
-          case '2':
-            bsType = '法定代表人';
-            break;
-          case '3':
-            bsType = '财务负责人';
-            break;
-          case '4':
-            bsType = '税务代理人';
-            break;
-          case '6':
-            bsType = '购票员';
-            break;
-          default:
-            bsType = ''
-            break;
-        }
-        console.log(roleType)
-        return bsType;
+      
+      clickHandle(index){
+        this.selected = index;
       }
     }
-    getRoleName(roleType) {
-        console.log(roleType)
-        let bsType = '';
-        switch (roleType) {
-          case '1':
-            bsType = '办税员';
-            break;
-          case '2':
-            bsType = '法定代表人';
-            break;
-          case '3':
-            bsType = '财务负责人';
-            break;
-          case '4':
-            bsType = '税务代理人';
-            break;
-          case '6':
-            bsType = '购票员';
-            break;
-          default:
-            bsType = ''
-            break;
-        }
-        console.log(roleType)
-        return bsType;
-      }
   }
 
 </script>
@@ -95,6 +48,7 @@
     margin: 8px 10px;
     border: 1px solid #BFBFBF;
     padding: 4px;
+    border-radius:2px;
     .logo-view {
       display: flex;
       flex-direction: column;
@@ -113,6 +67,9 @@
       }
     }
 
+  }
+  .selected-item{
+    border: 1px solid #387EF5;
   }
 
 </style>
